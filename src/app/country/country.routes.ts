@@ -12,6 +12,14 @@ export const countryRoutes: Routes = [
         component: ByCapitalPageComponent,
       },
       {
+        path: 'by-country',
+        component: ByCapitalPageComponent,
+      },
+      {
+        path: 'by-region',
+        component: ByCapitalPageComponent,
+      },
+      {
         path: '**',
         redirectTo: 'by-capital',
       }
