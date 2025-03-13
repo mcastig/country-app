@@ -26,7 +26,10 @@
           </span>
         </td>
         <td>
-          <a class="link-primary cursor-pointer">More information</a>
+          <a [routerLink]="['/country/by', country.cca2]"
+            class="link-primary cursor-pointer">
+            More information
+          </a>
         </td>
       </tr>
     }
