@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { RESTCountry } from '../interfaces/rest-countries.interface';
 import { Country } from '../interfaces/country.interface';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, delay, map, Observable, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class CountryService {
     return this.http.get<RESTCountry[]>(`${environment.API_URL}/capital/${query}`)
       .pipe(
         map((resp) => CountryMapper.mapRestCountryToCountryArray(resp)),
-        catchError(error => {
+        catchError((error) => {
           return throwError(() => new Error(`Not found any country with this term: ${query}`));
         })
       );
@@ -30,7 +30,8 @@ export class CountryService {
     return this.http.get<RESTCountry[]>(`${environment.API_URL}/name/${query}`)
       .pipe(
         map((resp) => CountryMapper.mapRestCountryToCountryArray(resp)),
-        catchError(error => {
+        delay(2000),
+        catchError((error) => {
           return throwError(() => new Error(`Not found any country with this term: ${query}`));
         })
       );

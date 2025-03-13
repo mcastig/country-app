@@ -10,4 +10,7 @@ import { RouterLink } from '@angular/router';
 })
 export class CountryListComponent {
   public countries = input.required<Country[]>();
+  public errorMessage = input<string|unknown|null>();
+  public isLoading = input<boolean>(false);
+  public isEmpty = input<boolean>(false);
  }
