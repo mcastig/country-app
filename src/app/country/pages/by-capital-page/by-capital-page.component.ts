@@ -19,10 +19,19 @@ export class ByCapitalPageComponent {
   public queryParam = this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
   public query = linkedSignal(() => this.queryParam);
 
+  public cleanQueryParams() {
+    this.router.navigate(['/country/by-capital'], {
+      queryParams: { },
+    });
+  }
+
   public countryResource = rxResource({
     request: () => ({ query: this.query() }),
     loader: ({ request }) => {
-      if(!request.query) return of([]);
+      if(!request.query) {
+        this.cleanQueryParams();
+        return of([]);
+      }
 
       this.router.navigate(['/country/by-capital'], {
         queryParams: {
