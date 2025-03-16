@@ -2,6 +2,7 @@
   (searchValue)="query.set($event)"
   placeholder="Search by Capital..."
   [debounceTime]="600"
+  [initialValue]="query()"
 />
 
 <country-list
