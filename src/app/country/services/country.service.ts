@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { RESTCountry } from '../interfaces/rest-countries.interface';
 import { Country } from '../interfaces/country.interface';
-import { catchError, delay, map, Observable, throwError } from 'rxjs';
+import { catchError, delay, map, Observable, of, tap, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 
 @Injectable({
@@ -11,13 +11,19 @@ import { CountryMapper } from '../mappers/country.mapper';
 })
 export class CountryService {
   private http = inject(HttpClient);
+  private queryCacheCapital = new Map<string, Country[]>();
 
   public searchByCapital(query: string): Observable<Country[]> {
     query = query.toLocaleLowerCase();
 
+    if (this.queryCacheCapital.has(query)) {
+      return of(this.queryCacheCapital.get(query) ?? []);
+    }
+
     return this.http.get<RESTCountry[]>(`${environment.API_URL}/capital/${query}`)
       .pipe(
         map((resp) => CountryMapper.mapRestCountryToCountryArray(resp)),
+        tap(countries => this.queryCacheCapital.set(query, countries)),
         catchError((error) => {
           return throwError(() => new Error(`Not found any country with this term: ${query}`));
         })
